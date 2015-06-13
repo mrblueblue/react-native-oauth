@@ -7,6 +7,14 @@ var githubClientID = config.github;
 module.exports = {
 
   github: function(){
+
+  	var handleUrl = function(event) {
+  	  console.log(event.url)
+  	  LinkingIOS.removeEventListener('url', handleUrl);
+  	}
+
+  	LinkingIOS.addEventListener('url', handleUrl);
+
     LinkingIOS.openURL([
       'https://github.com/login/oauth/authorize',
       `?client_id=${githubClientID}`,

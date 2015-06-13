@@ -2,9 +2,12 @@
 
 var React = require('react-native');
 var oauth = require('./utils/oauth');
+var config = require('../config.js');
+var githubClientID = config.github;
 
 var { 
 
+  LinkingIOS,
   ListView, 
   TouchableOpacity, 
   View, 
@@ -16,9 +19,11 @@ var {
 class App extends React.Component {
 
   constructor(){
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     super();
+
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
+
       apis: ds.cloneWithRows([
         'Github',
         'Dropbox',
@@ -27,7 +32,18 @@ class App extends React.Component {
         'Twitter',
         'Yahoo',
         'Wordpress'
-      ])
+      ]),
+
+      acess_token: {
+        github: null,
+        dropbox: null,
+        google: null,
+        facebook: null,
+        twitter: null,
+        yahoo: null,
+        wordpress: null
+      }
+
     };
   }
 
@@ -53,6 +69,11 @@ class App extends React.Component {
   authenticate(api){
     // invoke the proper api oauth function on click
     oauth[api.toLowerCase()]();
+
+  }
+
+  handleAuthSuccess(query){
+    console.log('*******SUCESS*******', query);
   }
 
 }

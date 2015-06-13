@@ -24,6 +24,8 @@ class App extends React.Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
 
+      redirect: null,
+
       apis: ds.cloneWithRows([
         'Github',
         'Dropbox',
@@ -34,20 +36,15 @@ class App extends React.Component {
         'Wordpress'
       ]),
 
-      acess_token: {
-        github: null,
-        dropbox: null,
-        google: null,
-        facebook: null,
-        twitter: null,
-        yahoo: null,
-        wordpress: null
-      }
+      github_token: null
 
     };
   }
 
   render(){
+    if (this.state.redirect){
+      return (<Text>{this.state.redirect}</Text>)
+    }
     return (
       <ListView 
         dataSource={this.state.apis}
@@ -68,12 +65,13 @@ class App extends React.Component {
 
   authenticate(api){
     // invoke the proper api oauth function on click
-    oauth[api.toLowerCase()]();
-
+    var invokeOAuth = oauth[api.toLowerCase()]
+    invokeOAuth(this.handleAuthSuccess.bind(this));
   }
 
-  handleAuthSuccess(query){
-    console.log('*******SUCESS*******', query);
+  handleAuthSuccess(token){
+    console.log('*************', token)
+    this.setState({ github_token: token, redirect: 'github' });
   }
 
 }
